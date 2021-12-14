@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "./App.css";
 import Navbar from "./components/layouts/Navbar";
 import Users from "./components/users/Users";
 import axios from "axios";
 import Search from "./components/users/Search";
 import Alert from "./components/layouts/Alert";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import About from "./components/Pages/About";
 
 // Functional component
 // function App() {
@@ -56,20 +58,26 @@ class App extends Component {
     const { loading, users } = this.state;
 
     return (
+      <Router>
       <div className="App">
         <Navbar title="Github Directory" icon="fab fa-github" />
         <div className="container">
-          <Alert alert={this.state.alert}/>
+          <Routes >
+            <Route exact path="/" element={<><Alert alert={this.state.alert}/>
+                <Search
+                  searchUsers={this.getUserSearch}
+                  onReset={this.onReset}
+                  showClear={users.length > 0 ? true : false}
+                  setAlert={this.setAlert}
+                />
+                <Users loading={loading} users={users} />   </>}/>
 
-          <Search
-            searchUsers={this.getUserSearch}
-            onReset={this.onReset}
-            showClear={users.length > 0 ? true : false}
-            setAlert={this.setAlert}
-          />
-          <Users loading={loading} users={users} />
+            <Route exact path="/about" element={<About />} />
+
+          </Routes >
         </div>
       </div>
+      </Router>
     );
   }
 }
