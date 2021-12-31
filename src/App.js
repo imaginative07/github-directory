@@ -7,14 +7,17 @@ import Search from "./components/users/Search";
 import Alert from "./components/layouts/Alert";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import About from "./components/Pages/About";
+import User from "./components/users/User";
 
 // Functional component
 // function App() {
 
 // Class based component
 class App extends Component {
+
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null,
   };
@@ -45,6 +48,13 @@ class App extends Component {
     this.setState({ users: githubData.data.items, loading: false });
   };
 
+  // Get user info
+  getUser = async (username) => {
+    //this.setState({ loading: true });
+    const userDetails = await axios.get(`https://api.github.com/users/${username}`);
+    this.setState({ user: userDetails.data, loading: false });
+  };
+
   onReset = () => {
     this.setState({ users: [], loading: false });
   };
@@ -55,7 +65,8 @@ class App extends Component {
   }
 
   render() {
-    const { loading, users } = this.state;
+
+    const { loading, users, user } = this.state;
 
     return (
       <Router>
@@ -70,16 +81,29 @@ class App extends Component {
                   showClear={users.length > 0 ? true : false}
                   setAlert={this.setAlert}
                 />
-                <Users loading={loading} users={users} />   </>}/>
+                <Users loading={loading} users={users} />   
+            </>}/>
 
             <Route exact path="/about" element={<About />} />
+
+            {/* <Route exact path="/user/:login" render={({ props }) => {
+              <User {...props} user={this.state.user} getUser={this.getUser} loading={loading} />
+            }} /> */}
+
+            <Route exact path="/user/:login" element={<User getUser={this.getUser} user={user} />} />
+
+            {/* <Route exact path="/user/:login" render={ user => (
+              <User {...user} user={user} getUser={this.getUser} loading={loading} />
+            )}  /> */}
 
           </Routes >
         </div>
       </div>
       </Router>
     );
+
   }
+  
 }
 
 export default App;

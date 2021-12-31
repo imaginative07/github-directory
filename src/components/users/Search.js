@@ -1,28 +1,21 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-class Search extends Component {
-    state = {
-        text:""
-    };
+const Search = ({searchUsers, setAlert, onReset, showClear}) => {
 
-    static propTypes = {
-        searchUsers: PropTypes.func.isRequired,
-        onReset: PropTypes.func.isRequired,
-        showClear: PropTypes.bool.isRequired,
+    const [text, setText] = useState('');
+
+    const onChange = (e) => {
+        setText(e.target.value);
     }
 
-    onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-    }
-
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        if(this.state.text === '') {
-            this.props.setAlert('Please enter a text to search', 'button_type');
+        if(text === '') {
+            setAlert('Please enter a text to search', 'button_type');
         } else {
-            this.props.searchUsers(this.state.text);
-            this.setState({ text: '' });
+            searchUsers(text);
+            setText('');
         }
     }
 
@@ -32,23 +25,27 @@ class Search extends Component {
     //     this.props.resetSearch();
     // }
 
-    render() {
 
-        // This method is correct and we can do this in other way
-        // if(this.props.show.length > 0) {
-        //     var clearButton = <input type="button" className="btn btn-light btn-block" value="Clear" onClick={this.onReset} />
-        // } 
+    // This method is correct and we can do this in other way
+    // if(this.props.show.length > 0) {
+    //     var clearButton = <input type="button" className="btn btn-light btn-block" value="Clear" onClick={this.onReset} />
+    // } 
 
-        return (
-            <div className="">
-                <form onSubmit={this.onSubmit} className="search">
-                    <input type="text" className="" placeholder="Search Users" name="text" value={this.state.text} onChange={this.onChange} />
-                    <input type="submit" className="btn btn-dark btn-block" value="Search" />
-                    {this.props.showClear && <input type="button" className="btn btn-light btn-block" value="Clear" onClick={this.props.onReset} />}
-                </form>
-            </div>
-        )
-    }
+    return (
+        <div className="">
+            <form onSubmit={onSubmit} className="search">
+                <input type="text" className="" placeholder="Search Users" name="text" value={text} onChange={onChange} />
+                <input type="submit" className="btn btn-dark btn-block" value="Search" />
+                {showClear && <input type="button" className="btn btn-light btn-block" value="Clear" onClick={onReset} />}
+            </form>
+        </div>
+    )
+}
+
+Search.propTypes = {
+    searchUsers: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    showClear: PropTypes.bool.isRequired,
 }
 
 export default Search;
