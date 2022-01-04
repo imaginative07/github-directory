@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from "react";
 import "./App.css";
 import Navbar from "./components/layouts/Navbar";
-import Users from "./components/users/Users";
+import Users from "./components/Users/Users";
 import axios from "axios";
-import Search from "./components/users/Search";
+import Search from "./components/Users/Search";
 import Alert from "./components/layouts/Alert";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import About from "./components/Pages/About";
-import User from "./components/users/User";
+import User from "./components/Users/User";
 
 // Functional component
 // function App() {
